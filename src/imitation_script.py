@@ -1,44 +1,45 @@
 #!/usr/bin/env python3
-
 import pandas as pd
 import numpy as np
 import imitation
 from imitation.data import types
 from imitation.algorithms import bc
-import os
 import pathlib
 import gymnasium as gym
 
-class imitation_node:
-    def __init__(self, load=False) -> None:
+class imitation_class:
+    def __init__(self, load=False, prefix="", position=False, policy="bc_policy") -> None:
         self.obs_space= gym.spaces.Box(low=-1.0, high=1.0, shape=(7,), dtype=np.float32)
         self.act_space = gym.spaces.Box(low=-1.5, high=1.5, shape=(7,), dtype=np.float32)
-        self.trajectories = self.create_trajectories()
+
+        if position:
+            self.obs_space= gym.spaces.Box(low=-1.0, high=1.0, shape=(3,), dtype=np.float32)
+            self.act_space = gym.spaces.Box(low=-1.5, high=1.5, shape=(3,), dtype=np.float32)
+
+        self.trajectories = self.create_trajectories(prefix, position)
         rng = np.random.default_rng()
         self.bc_trainer = bc.BC(
             observation_space=self.obs_space,
             action_space=self.act_space,
             demonstrations=self.trajectories,
             rng=rng,
-            policy= self.load_model() if load else None
+            policy= self.load_model(policy) if load else None
         )
-        
+
         if not load:
-            # rospy.loginfo("Training...")
-            self.bc_trainer.train(n_epochs=50) # more epochs = better, generally
+            self.bc_trainer.train(n_epochs=50)
             #save model
-            self.bc_trainer.save_policy("bc_policy")
-            # rospy.loginfo("Done training.")
+            self.bc_trainer.save_policy(policy)
 
     # create trajectories from raw data to train on
-    def create_trajectories(self):
+    def create_trajectories(self, prefix, position=False):
+        if prefix=="": prefix="reach"
         trajectories = []
-        for folder in pathlib.Path("raw_data", "reach").iterdir():
+        for folder in pathlib.Path("raw_data", prefix).iterdir():
             if folder.is_dir():
                 for file in folder.iterdir():
                     # if file is csv
                     if file.suffix == ".csv":
-                        print(file)
                         df = pd.read_csv(file, header=0)
                         df = df.drop(columns="position")
                         df = df.drop(columns="orientation")
@@ -53,6 +54,9 @@ class imitation_node:
 
                         df.drop(columns="rosbagTimestamp", inplace=True)
 
+                        if position: # drop orientation columns
+                            df.drop(columns=["x.1", "y.1", "z.1", "w"], inplace=True)
+
                         obs = df.to_numpy()
                         acts = np.zeros((obs.shape[0]-1, obs.shape[1]))
                         for i in range(obs.shape[0]-1):
@@ -66,45 +70,23 @@ class imitation_node:
                         traj = types.Trajectory(obs, acts, infos = None, terminal=True)
                         trajectories.append(traj)
         return trajectories
-    
+
     def step(self, obs):
         return self.bc_trainer.policy.predict(obs, deterministic=True)
-    
+
     def predict_pose_cb(self, req):
         # repackage obs into correct format here
         act, state = self.step(req.observation)
 
-    def load_model(self):
-        return imitation.algorithms.bc.reconstruct_policy("bc_policy")
-    
+    def load_model(self, policy="bc_policy"):
+        policy_path = pathlib.Path("mysite", policy)
+        return imitation.algorithms.bc.reconstruct_policy(str(policy_path))
+
 # provide obs as a numpy array
-def query_next_pose(obs):
-    n = imitation_node(load=True)
+def query_next_pose(obs=None, position=False, policy="bc_policy"):
+    n = imitation_class(load=True, position=position, policy=policy)
+
     return n.step(obs)
-    
+
 if __name__ == "__main__":
-    # rospy.init_node("imitation_node")
-    n = imitation_node(load=True)
-
-    # rospy.spin()
-
-    ###
-    ### TESTING / SANITY CHECKING
-    ###
-
-    for i in range(len(n.trajectories)):
-    # i = 1
-        test = np.array(n.trajectories[i].obs[0,:])
-        expect = np.array(n.trajectories[i].acts[0,:])
-        print("prediction")
-        act, state = n.step(test)
-        np.set_printoptions(suppress=True)
-        # print(act)
-        # print(expect)
-        print(act-expect)
-
-
-
-
-
-
+    n = imitation_class(load=False, prefix="fall", position=True, policy="fall")

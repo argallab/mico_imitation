@@ -59,7 +59,6 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   QueryMLVel.srv
-  QueryML.srv
   Policy.srv
 )
 

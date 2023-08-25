@@ -2,7 +2,7 @@
 Implementation of behavioral cloning with Mico
 ## Dependencies
 Python packages
-- [`imitation'](https://imitation.readthedocs.io/en/latest/)
+- [imitation](https://imitation.readthedocs.io/en/latest/)
 - numpy
 - pandas
 - gymnasium

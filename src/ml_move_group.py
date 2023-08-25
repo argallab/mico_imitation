@@ -34,15 +34,6 @@
 #
 # Author: Acorn Pooley, Mike Lautman
 
-## BEGIN_SUB_TUTORIAL imports
-##
-## To use the Python MoveIt interfaces, we will import the `moveit_commander`_ namespace.
-## This namespace provides us with a `MoveGroupCommander`_ class, a `PlanningSceneInterface`_ class,
-## and a `RobotCommander`_ class. (More on these below)
-##
-## We also import `rospy`_ and some messages that we will use:
-##
-
 import sys
 import copy
 import rospy
@@ -259,39 +250,8 @@ def main():
 
     # m.set_start_pose()
 
-    # for _ in range(50):
-    #   m.go_to_position()
-
-
-    # tutorial.go_to_start([0.18109965, -0.3872645, 0.51798123])
-    # tutorial.go_to_start_pose([0.18109965, -0.3872645, 0.51798123, 0.43779767, -0.4296185, 0.54606748, 0.57058871])
-    m.go_to_start_pose()
-
-    # for _ in range(20):
-    #   m.query_pose(move=True, verbose=False)
-
-    # for _ in range(10):
-    #   tutorial.go_to_pose_test()
-
-    # for _ in range(1): # TODO change to infinite loop?
-    #   rospy.wait_for_service()
-    #   next_pose = 
-
-    # print "============ Press `Enter` to execute a movement using a pose goal ..."
-    # raw_input()
-    # tutorial.go_to_pose_goal()
-
-    # print "============ Press `Enter` to plan and display a Cartesian path ..."
-    # raw_input()
-    # cartesian_plan, fraction = tutorial.plan_cartesian_path()
-
-    # print "============ Press `Enter` to display a saved trajectory (this will replay the Cartesian path)  ..."
-    # raw_input()
-    # tutorial.display_trajectory(cartesian_plan)
-
-    # print "============ Press `Enter` to execute a saved path ..."
-    # raw_input()
-    # tutorial.execute_plan(cartesian_plan)
+    for _ in range(50):
+      m.go_to_position()
 
   except rospy.ROSInterruptException:
     return
@@ -300,39 +260,3 @@ def main():
 
 if __name__ == '__main__':
   main()
-
-## BEGIN_TUTORIAL
-## .. _moveit_commander:
-##    http://docs.ros.org/kinetic/api/moveit_commander/html/namespacemoveit__commander.html
-##
-## .. _MoveGroupCommander:
-##    http://docs.ros.org/kinetic/api/moveit_commander/html/classmoveit__commander_1_1move__group_1_1MoveGroupCommander.html
-##
-## .. _RobotCommander:
-##    http://docs.ros.org/kinetic/api/moveit_commander/html/classmoveit__commander_1_1robot_1_1RobotCommander.html
-##
-## .. _PlanningSceneInterface:
-##    http://docs.ros.org/kinetic/api/moveit_commander/html/classmoveit__commander_1_1planning__scene__interface_1_1PlanningSceneInterface.html
-##
-## .. _DisplayTrajectory:
-##    http://docs.ros.org/kinetic/api/moveit_msgs/html/msg/DisplayTrajectory.html
-##
-## .. _RobotTrajectory:
-##    http://docs.ros.org/kinetic/api/moveit_msgs/html/msg/RobotTrajectory.html
-##
-## .. _rospy:
-##    http://docs.ros.org/kinetic/api/rospy/html/
-## CALL_SUB_TUTORIAL imports
-## CALL_SUB_TUTORIAL setup
-## CALL_SUB_TUTORIAL basic_info
-## CALL_SUB_TUTORIAL plan_to_joint_state
-## CALL_SUB_TUTORIAL plan_to_pose
-## CALL_SUB_TUTORIAL plan_cartesian_path
-## CALL_SUB_TUTORIAL display_trajectory
-## CALL_SUB_TUTORIAL execute_plan
-## CALL_SUB_TUTORIAL add_box
-## CALL_SUB_TUTORIAL wait_for_scene_update
-## CALL_SUB_TUTORIAL attach_object
-## CALL_SUB_TUTORIAL detach_object
-## CALL_SUB_TUTORIAL remove_object
-## END_TUTORIAL

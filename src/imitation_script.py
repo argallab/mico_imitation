@@ -23,13 +23,13 @@ class imitation_class:
             action_space=self.act_space,
             demonstrations=self.trajectories,
             rng=rng,
-            policy= self.load_model(policy) if load else None
+            policy= self.load_model(pathlib.Path("policy", policy)) if load else None
         )
 
         if not load:
             self.bc_trainer.train(n_epochs=50)
             #save model
-            self.bc_trainer.save_policy(policy)
+            self.bc_trainer.save_policy(pathlib.Path("policy", policy))
 
     # create trajectories from raw data to train on
     def create_trajectories(self, prefix, position=False):
@@ -79,7 +79,7 @@ class imitation_class:
         act, state = self.step(req.observation)
 
     def load_model(self, policy="bc_policy"):
-        policy_path = pathlib.Path("mysite", policy)
+        policy_path = pathlib.Path("policy", policy)
         return imitation.algorithms.bc.reconstruct_policy(str(policy_path))
 
 # provide obs as a numpy array

@@ -28,7 +28,7 @@ rosbag record -o <prefix> eef_pose
 Note: all rosbags of the same motion type (intended to train the same model together) should be prefixed with the same name. When the `create_trajectories` function in `imitation_script.py` is run, it accepts a prefix as the argument and trains on all files which begin with that prefix.
 
 ### Policy training
-Before training, convert rosbags to csv files (this can be done using [`extract_topics_from_bag.py](extract_topics_from_bag.py))  
+Before training, convert rosbags to csv files (this can be done using [extract_topics_from_bag.py](extract_topics_from_bag.py))  
 Train a policy by modifying the main of `imitation_script.py`, changing the prefix to the relevant rosbag prefix and giving it a relevant policy name (policy name can be the same as the rosbag prefix)
 ```
     n = imitation_class(load=False, prefix=<prefix>, position=True, policy=<policy_name>)

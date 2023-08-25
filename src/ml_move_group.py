@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+'''
+Adapted from
+  Move Group Python Interface Tutorial
+  http://docs.ros.org/en/kinetic/api/moveit_tutorials/html/doc/move_group_python_interface/move_group_python_interface_tutorial.html
+'''
+
 # Software License Agreement (BSD License)
 #
 # Copyright (c) 2013, SRI International

@@ -7,6 +7,9 @@ Python packages
 - pandas
 - gymnasium
 
+## Python2/3 Incompatibility
+The `imitation` Python module requires Python3.8+, but the master branch of `mico_base` is still using ROS Kinetic, which is only comptible with Python 2. The current workaround is to have a version of [imitation_script.py](src/imitation_script.py) hosted on [pythonanywhere.com](https://www.pythonanywhere.com/) along with a Flask app. [web_client.py](src/web_client.py) uses the Python `requests` module to communicate with the Flask app over `http` to query the pre-trained policies. Requests should be made to [http://stephaniiema.pythonanywhere.com/](http://stephaniiema.pythonanywhere.com/). (Note that pythonanywhere.com sets expirations on web app hosting and will stop hosting this web app Friday 17 November 2023.)
+
 ## Usage
 ### Collecting Demonstration Trajectories
 To collect demonstration trajectories, launch mico teleoperation
@@ -52,6 +55,3 @@ before running the move_group script, move mico to the desired starting position
 rosrun mico_imitation ml_move_group.py
 ```
 You can change the policy being used and the number of steps it takes by modifying the main function in `ml_move_group.py` before running. Pretrained policies can be found in the [policy](policy/) folder.
-
-## Python2/3 Incompatibility
-The `imitation` Python module requires Python3.8+, but the master branch of `mico_base` is still using ROS Kinetic, which is only comptible with Python 2. The current workaround is to have a version of [imitation_script.py](src/imitation_script.py) hosted on [pythonanywhere.com](https://www.pythonanywhere.com/) along with a Flask app. [web_client.py](src/web_client.py) uses the Python `requests` module to communicate with the Flask app over `http` to query the pre-trained policies. Requests should be made to [http://stephaniiema.pythonanywhere.com/](http://stephaniiema.pythonanywhere.com/). (Note that pythonanywhere.com sets expirations on web app hosting and will stop hosting this web app Friday 17 November 2023.)

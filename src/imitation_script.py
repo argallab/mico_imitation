@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+'''
+Adapted from
+    Train an Agent Using Behavior Cloning
+    https://imitation.readthedocs.io/en/latest/tutorials/1_train_bc.html
+'''
 import pandas as pd
 import numpy as np
 import imitation
